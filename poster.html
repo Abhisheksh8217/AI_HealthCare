@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intelligent Multilingual Healthcare Support System - Poster</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-light: #eff6ff;
+            --secondary: #10b981;
+            --dark: #0f172a;
+            --text: #334155;
+            --text-light: #64748b;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: #e2e8f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* A3 Landscape Paper Size Approximation */
+        .poster-container {
+            width: 1400px;
+            min-height: 990px;
+            height: auto;
+            background: var(--bg);
+            background-image: radial-gradient(circle at 10% 10%, rgba(37, 99, 235, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 90% 90%, rgba(16, 185, 129, 0.05) 0%, transparent 50%);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            padding: 40px 50px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            border-radius: 12px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid rgba(37, 99, 235, 0.1);
+        }
+
+        .title {
+            font-size: 42px;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            font-size: 22px;
+            font-weight: 400;
+            color: var(--primary);
+        }
+
+        /* Main Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 300px 1fr 300px;
+            gap: 30px;
+            flex-grow: 1;
+        }
+
+        /* Sections */
+        .section {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title::before {
+            content: '';
+            display: block;
+            width: 8px;
+            height: 24px;
+            background: var(--secondary);
+            border-radius: 4px;
+        }
+
+        /* Lists */
+        ul {
+            list-style: none;
+        }
+
+        li {
+            margin-bottom: 16px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text);
+            position: relative;
+            padding-left: 24px;
+        }
+
+        li::before {
+            content: '•';
+            color: var(--secondary);
+            font-weight: bold;
+            font-size: 24px;
+            position: absolute;
+            left: 0;
+            top: -4px;
+        }
+
+        li strong {
+            color: var(--dark);
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        /* Architecture Diagram (CSS Based) */
+        .arch-diagram {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            height: 100%;
+        }
+
+        .layer {
+            background: var(--primary-light);
+            border: 2px dashed rgba(37, 99, 235, 0.3);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            position: relative;
+        }
+
+        .layer-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .components {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .component {
+            background: white;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--dark);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .arrow {
+            text-align: center;
+            color: var(--text-light);
+            font-size: 20px;
+            margin: -10px 0;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 30px;
+            background: var(--dark);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .footer h3 {
+            color: var(--secondary);
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .footer p {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #cbd5e1;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* Print Settings */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .poster-container {
+                box-shadow: none;
+                width: 100%;
+                height: 100%;
+                page-break-after: avoid;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="poster-container">
+        <!-- Header -->
+        <div class="header">
+            <h1 class="title">Intelligent Rural Healthcare Support System Using Telemedicine and AI</h1>
+            <h2 class="subtitle">An AI-Driven Solution for Real-Time Health Monitoring and Medical Assistance</h2>
+        </div>
+
+        <!-- Main Grid -->
+        <div class="content-grid">
+
+            <!-- Left Column: Objectives -->
+            <div class="section">
+                <h3 class="section-title">Objectives</h3>
+                <ul>
+                    <li>
+                        <strong>Accessible Health Monitoring</strong>
+                        Enable non-invasive, real-time vital sign tracking (Heart Rate) using standard smartphone or
+                        laptop cameras via PPG technology.
+                    </li>
+                    <li>
+                        <strong>AI-Powered Diagnostics</strong>
+                        Utilize advanced Generative AI (Groq API) for multilingual symptom checking and
+                        automated health scoring.
+                    </li>
+                    <li>
+                        <strong>Proactive Alert System</strong>
+                        Automate critical health alerts and medication reminders via WhatsApp (Twilio) for high-risk
+                        patients.
+                    </li>
+                    <li>
+                        <strong>Unified Healthcare Hub</strong>
+                        Create a seamless bridge connecting patients, family members, and doctors for efficient
+                        telemedicine and appointment management.
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Center Column: Architecture Diagram -->
+            <div class="section" style="background: transparent; box-shadow: none; border: none; padding: 0;">
+                <h3 class="section-title" style="justify-content: center; margin-bottom: 15px;">System Architecture</h3>
+
+                <div class="arch-diagram">
+                    <!-- Layer 1 -->
+                    <div class="layer">
+                        <div class="layer-title">User Interface Layer</div>
+                        <div class="components">
+                            <div class="component">⚛️ React (Vite)</div>
+                            <div class="component">📊 Recharts Dashboards</div>
+                            <div class="component">🌐 Multilingual UI</div>
+                        </div>
+                    </div>
+
+                    <div class="arrow">↓</div>
+
+                    <!-- Layer 2 -->
+                    <div class="layer" style="background: #f0fdf4; border-color: rgba(16, 185, 129, 0.3);">
+                        <div class="layer-title" style="color: var(--secondary);">AI & Processing Engine</div>
+                        <div class="components">
+                            <div class="component">🧠 Groq Chatbot</div>
+                            <div class="component">📷 Client-Side PPG Processor</div>
+                            <div class="component">📈 Health Scoring Logic</div>
+                        </div>
+                    </div>
+
+                    <div class="arrow">↓ ↑</div>
+
+                    <!-- Layer 3 -->
+                    <div class="layer" style="background: #f8fafc; border-color: rgba(100, 116, 139, 0.3);">
+                        <div class="layer-title" style="color: var(--text);">Backend & Cloud Services</div>
+                        <div class="components">
+                            <div class="component">🟢 Node.js / Express APIs</div>
+                            <div class="component">🗄️ MySQL Database</div>
+                            <div class="component">🔐 JWT Auth</div>
+                        </div>
+                    </div>
+
+                    <div class="arrow">↔</div>
+
+                    <!-- Layer 4 -->
+                    <div class="layer" style="background: #fff7ed; border-color: rgba(249, 115, 22, 0.3);">
+                        <div class="layer-title" style="color: #ea580c;">External Integrations</div>
+                        <div class="components">
+                            <div class="component">💬 Twilio WhatsApp API (Alerts)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Algorithms -->
+            <div class="section">
+                <h3 class="section-title">Algorithms Used</h3>
+                <ul>
+                    <li>
+                        <strong>CHROM + POS + ICA Fusion Pipeline</strong>
+                        Deep Signal Processing pipeline utilizing Chrominance-based (CHROM), Plane Orthogonal to Skin
+                        (POS), and Independent Component Analysis (ICA) to estimate heart rate (BPM) from live camera
+                        video frames.
+                    </li>
+                    <li>
+                        <strong>SNR-Weighted Fusion</strong>
+                        Dynamically calculates Signal-to-Noise Ratio (SNR) to give higher weight to the most accurate
+                        algorithmic component in real-time.
+                    </li>
+                    <li>
+                        <strong>Time-Domain Peak Detection</strong>
+                        Used for continuous motion/stability checking, face ROI (Region of Interest) tracking, and
+                        accurate pulse peak extraction.
+                    </li>
+                    <li>
+                        <strong>Natural Language Processing (NLP)</strong>
+                        Leverages Groq LLM for interpreting user symptoms, analyzing health severity (0-100 score),
+                        and driving a multilingual conversational experience.
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <h3>Conclusion</h3>
+            <p>
+                The Intelligent Rural Healthcare Support System Using Telemedicine and AI successfully bridges the gap
+                between remote patients and medical professionals. By combining accessible, non-invasive vital
+                monitoring (camera-based PPG) with robust, multilingual AI diagnostics, this scalable solution
+                significantly improves rural healthcare access, early warning detection, and proactive patient care.
+            </p>
+        </div>
+
+    </div>
+
+</body>
+
+</html>
