@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import api from '../api/axios';
 import toast from 'react-hot-toast';
-import { Plus, Trash2, Send } from 'lucide-react';
+import { Plus, Trash2, Send, MessageCircle } from 'lucide-react';
 import { useLang } from '../context/LanguageContext';
 
 const PRESETS = {
@@ -92,6 +92,44 @@ export default function Reminders() {
         <button className="btn btn-primary" onClick={() => setShowForm(!showForm)}>
           <Plus size={16} /> {t('addReminder')}
         </button>
+      </div>
+
+      {/* WhatsApp Sandbox Activation Banner */}
+      <div style={{
+        padding: '14px 18px',
+        background: '#ecfdf5',
+        border: '1px solid #a7f3d0',
+        borderRadius: 10,
+        marginBottom: 20,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        gap: 12
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div style={{ fontSize: 24 }}>📱</div>
+          <div>
+            <div style={{ fontWeight: 600, color: '#065f46', fontSize: 14 }}>
+              {lang === 'kn' ? 'WhatsApp ಲೈವ್ ಅಧಿಸೂಚನೆಗಳನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿ' : 'Enable Live WhatsApp Notifications'}
+            </div>
+            <div style={{ fontSize: 12, color: '#047857', marginTop: 2 }}>
+              {lang === 'kn'
+                ? 'ನಿಮ್ಮ ಫೋನ್‌ಗೆ ಎಚ್ಚರಿಕೆ ಬರಲು, WhatsApp ನಲ್ಲಿ +1 415 523 8886 ಗೆ "join attention-two" ಎಂದು ಕಳುಹಿಸಿ.'
+                : 'To receive automated alerts, send "join attention-two" to +1 415 523 8886 on WhatsApp once.'}
+            </div>
+          </div>
+        </div>
+        <a
+          href="https://wa.me/14155238886?text=join%20attention-two"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="btn btn-sm"
+          style={{ background: '#10b981', color: '#fff', border: 'none', display: 'inline-flex', alignItems: 'center', gap: 6, fontWeight: 600, textDecoration: 'none' }}
+        >
+          <MessageCircle size={15} />
+          <span>{lang === 'kn' ? 'WhatsApp ಲಿಂಕ್ ಮಾಡಿ (1-ಕ್ಲಿಕ್)' : 'Connect WhatsApp (1-Click)'}</span>
+        </a>
       </div>
 
       <div className="card" style={{ marginBottom: 20 }}>
@@ -188,10 +226,22 @@ export default function Reminders() {
                     <td>{r.frequency || '—'}</td>
                     <td>
                       <div style={{ display: 'flex', gap: 6 }}>
-                        <button className="btn btn-sm btn-success" onClick={() => handleTrigger(r.id)} title="Send WhatsApp now">
+                        <button className="btn btn-sm btn-success" onClick={() => handleTrigger(r.id)} title="Send automated WhatsApp alert via Twilio">
                           <Send size={13} />
                         </button>
-                        <button className="btn btn-sm btn-danger" onClick={() => handleDelete(r.id)}>
+                        {r.phone && (
+                          <a
+                            className="btn btn-sm"
+                            style={{ background: '#25D366', color: '#fff', padding: '4px 8px', display: 'inline-flex', alignItems: 'center' }}
+                            href={`https://wa.me/${r.phone.replace(/\D/g, '')}?text=${encodeURIComponent(`🔔 *Reminder: ${r.title}*\n${r.description ? `📝 ${r.description}\n` : ''}${r.reminder_time ? `⏰ Scheduled: ${r.reminder_time}\n` : ''}\n_HealthCare App_`)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title="Open direct chat in WhatsApp"
+                          >
+                            <MessageCircle size={13} />
+                          </a>
+                        )}
+                        <button className="btn btn-sm btn-danger" onClick={() => handleDelete(r.id)} title="Delete reminder">
                           <Trash2 size={13} />
                         </button>
                       </div>

@@ -35,10 +35,7 @@ const createReminder = async (req, res) => {
       await sendWhatsApp(phone, msg);
     } catch (err) {
       console.error('WhatsApp Error:', err.message);
-      const isTestNumberError = err.message && (err.message.includes('recipient') || err.message.includes('test') || err.message.includes('allowed'));
-      twilioError = isTestNumberError 
-        ? 'Recipient must be added to the allowed Test Numbers list in your Meta Developer Console.' 
-        : 'Failed to send WhatsApp message';
+      twilioError = "To receive WhatsApp alerts on " + phone + ", send 'join attention-two' to +1 415 523 8886 on WhatsApp first.";
     }
   }
 
@@ -73,14 +70,11 @@ const triggerReminder = async (req, res) => {
 
   try {
     await sendWhatsApp(r.phone, msg);
-    res.json({ message: 'WhatsApp notification sent' });
+    res.json({ message: 'WhatsApp notification sent successfully!' });
   } catch (err) {
     console.error('WhatsApp Error:', err.message);
-    const isTestNumberError = err.message && (err.message.includes('recipient') || err.message.includes('test') || err.message.includes('allowed'));
     res.status(500).json({
-      message: isTestNumberError
-        ? 'Recipient phone number is not registered in your Meta Developer Console Allowed Test Numbers list.'
-        : 'Failed to send WhatsApp message',
+      message: `Failed to deliver WhatsApp message to ${r.phone}. If using sandbox, send 'join attention-two' to +1 415 523 8886 on WhatsApp first.`,
       error: err.message,
     });
   }
