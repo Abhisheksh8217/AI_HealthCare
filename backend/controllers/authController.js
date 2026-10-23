@@ -22,15 +22,23 @@ const register = async (req, res) => {
     const hashed = await bcrypt.hash(password, 10);
     const verificationToken = crypto.randomBytes(32).toString('hex');
     
+    // Require email verification if SMTP credentials are provided or explicitly enabled
+    const emailConfigured = Boolean(process.env.EMAIL_USER && process.env.EMAIL_PASS);
+    const requireVerification = process.env.REQUIRE_EMAIL_VERIFICATION === 'true' || 
+      (process.env.REQUIRE_EMAIL_VERIFICATION !== 'false' && emailConfigured);
+    const isVerified = !requireVerification;
+
     await db.query(
       'INSERT INTO users (name, email, password, phone, role, is_verified, verification_token) VALUES (?,?,?,?,?,?,?)',
-      [name, email, hashed, phone || null, role || 'patient', false, verificationToken]
+      [name, email, hashed, phone || null, role || 'patient', isVerified, isVerified ? null : verificationToken]
     );
     
-    // Send email verification link
-    await sendVerificationEmail(email, name, verificationToken);
-    
-    res.status(201).json({ message: 'Registration successful! Please check your email to verify your account.' });
+    if (requireVerification) {
+      await sendVerificationEmail(email, name, verificationToken);
+      return res.status(201).json({ message: 'Registration successful! Please check your email to verify your account.' });
+    }
+
+    res.status(201).json({ message: 'Registration successful! You can now log in.' });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

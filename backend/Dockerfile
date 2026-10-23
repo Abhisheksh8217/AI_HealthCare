@@ -4,4 +4,4 @@ COPY package*.json ./
 RUN npm install
 COPY . .
 EXPOSE 5000
-CMD node utils/wait-and-migrate.js && npm run dev
+CMD node utils/wait-and-migrate.js && npm start

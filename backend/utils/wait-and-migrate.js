@@ -1,51 +1,38 @@
 const fs = require('fs');
 const path = require('path');
-const mysql = require('mysql2/promise');
+const db = require('../config/db');
 
 const waitAndMigrate = async () => {
-  const dbConfig = {
-    host: process.env.DB_HOST || '127.0.0.1',
-    port: parseInt(process.env.DB_PORT || '3306', 10),
-    user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || '',
-    database: process.env.DB_NAME || 'defaultdb',
-    ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false
-  };
+  console.log('[Database] Checking connection to database...');
 
-  console.log('Connecting to database:', dbConfig.host, 'on port', dbConfig.port);
-
-  let pool;
   let connected = false;
   let retries = 15;
 
   while (retries > 0 && !connected) {
     try {
-      pool = mysql.createPool(dbConfig);
-      // Test query
-      await pool.query('SELECT 1');
+      await db.query('SELECT 1');
       connected = true;
-      console.log('Successfully connected to the database!');
+      console.log('[Database] Successfully connected!');
     } catch (err) {
-      console.log(`Database connection failed: ${err.message}. Retrying in 3 seconds... (${retries} retries left)`);
+      console.log(`[Database] Connection waiting: ${err.message}. Retrying in 3 seconds... (${retries} retries left)`);
       retries--;
-      if (pool) await pool.end();
       await new Promise(res => setTimeout(res, 3000));
     }
   }
 
   if (!connected) {
-    console.error('Could not connect to database after several retries. Exiting.');
+    console.error('[Database] Could not connect to database after several retries. Exiting.');
     process.exit(1);
   }
 
   try {
-    console.log('Running database migrations...');
+    console.log('[Migration] Running database migrations...');
     const schemaPath = path.join(__dirname, '../config/schema.sql');
     let sql = fs.readFileSync(schemaPath, 'utf8');
 
-    // Remove database creation and use statements to run inside defaultdb
-    sql = sql.replace(/CREATE DATABASE IF NOT EXISTS health;/gi, '');
-    sql = sql.replace(/USE health;/gi, '');
+    // Remove database creation and use statements so tables are created in the active connected database
+    sql = sql.replace(/CREATE DATABASE IF NOT EXISTS [`\w]+;/gi, '');
+    sql = sql.replace(/USE [`\w]+;/gi, '');
 
     const statements = sql
       .split(';')
@@ -54,15 +41,13 @@ const waitAndMigrate = async () => {
 
     for (let statement of statements) {
       if (statement.startsWith('--') || statement.startsWith('/*')) continue;
-      await pool.query(statement);
+      await db.query(statement);
     }
 
-    console.log('Database migration complete! All tables initialized.');
-    await pool.end();
+    console.log('[Migration] Database migration complete! All tables verified and ready.');
     process.exit(0);
   } catch (err) {
-    console.error('Migration failed during execution:', err.message);
-    if (pool) await pool.end();
+    console.error('[Migration] Migration failed during execution:', err.message);
     process.exit(1);
   }
 };

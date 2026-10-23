@@ -15,7 +15,8 @@ app.use('/api/doctor', require('./routes/doctor'));
 app.use('/api/appointments', require('./routes/appointments'));
 app.use('/api/ai', require('./routes/ai'));
 
-app.get('/api/health-check', (_, res) => res.json({ status: 'ok' }));
+app.get('/', (_, res) => res.json({ status: 'ok', message: 'Healthcare API is running smoothly' }));
+app.get('/api/health-check', (_, res) => res.json({ status: 'ok', timestamp: new Date().toISOString() }));
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, '0.0.0.0', () => console.log(`Server running on port ${PORT}`));
