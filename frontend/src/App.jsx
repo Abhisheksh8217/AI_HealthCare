@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './context/AuthContext';
@@ -27,12 +28,14 @@ import AIReportScanner from './pages/AIReportScanner';
 
 function ProtectedLayout({ children }) {
   const { user } = useAuth();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   if (!user) return <Navigate to="/login" replace />;
   return (
     <div className="app-layout">
-      <Sidebar />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="main-content">
-        <Topbar />
+        <Topbar onToggleSidebar={() => setSidebarOpen(prev => !prev)} />
         <div className="page-content">{children}</div>
       </div>
     </div>

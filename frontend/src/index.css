@@ -638,17 +638,79 @@ tbody tr:hover { background: rgba(255, 255, 255, 0.025); }
   50% { box-shadow: 0 0 20px rgba(239, 68, 68, 0.2); background: rgba(239, 68, 68, 0.14); }
 }
 
+/* Mobile Navigation Controls */
+.mobile-menu-btn {
+  display: none;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+.mobile-menu-btn:hover {
+  background: var(--primary);
+  color: white;
+}
+
+.sidebar-close-btn {
+  display: none;
+}
+
+.sidebar-backdrop {
+  display: none;
+}
+
 /* Responsive constraints */
 @media (max-width: 992px) {
-  .sidebar { transform: translateX(-100%); }
-  .main-content { margin-left: 0; }
+  .mobile-menu-btn {
+    display: flex;
+  }
+  .sidebar {
+    transform: translateX(-100%);
+    box-shadow: none;
+    z-index: 100;
+  }
+  .sidebar.open {
+    transform: translateX(0);
+    box-shadow: 0 0 35px rgba(0, 0, 0, 0.7);
+  }
+  .sidebar-backdrop.open {
+    display: block;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(4px);
+    z-index: 95;
+  }
+  .sidebar-close-btn {
+    display: flex;
+    margin-left: auto;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 6px;
+    align-items: center;
+    justify-content: center;
+  }
+  .sidebar-close-btn:hover {
+    color: var(--text);
+    background: var(--surface-hover);
+  }
+  .main-content { margin-left: 0; width: 100%; }
   .form-grid, .form-grid-3, .grid-2, .grid-3 { grid-template-columns: 1fr; }
   .stats-grid { grid-template-columns: 1fr 1fr; }
-  .page-content { padding: 24px; }
+  .page-content { padding: 20px; }
 }
 
 @media (max-width: 576px) {
+  .topbar-welcome { display: none; }
+  .topbar { padding: 0 14px; }
   .stats-grid { grid-template-columns: 1fr; }
-  .page-content { padding: 16px; }
-  .topbar { padding: 0 16px; }
+  .page-content { padding: 14px; }
 }

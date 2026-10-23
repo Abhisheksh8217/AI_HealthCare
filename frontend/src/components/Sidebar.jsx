@@ -4,14 +4,19 @@ import { useLang } from '../context/LanguageContext';
 import {
   LayoutDashboard, User, Heart, Users, Bell, AlertCircle,
   Stethoscope, Calendar, Bot, LogOut, Activity, Pill, Camera, FileSearch,
-  Brain, ChefHat, ShieldAlert, FileText
+  Brain, ChefHat, ShieldAlert, FileText, X
 } from 'lucide-react';
 
-export default function Sidebar() {
+export default function Sidebar({ isOpen, onClose }) {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const { t, lang } = useLang();
+
+  const handleNavigate = (path) => {
+    navigate(path);
+    if (onClose) onClose();
+  };
 
   const navConfig = {
     patient: [
@@ -57,45 +62,58 @@ export default function Sidebar() {
   const sections = navConfig[user?.role] || navConfig.patient;
 
   return (
-    <aside className="sidebar">
-      <div className="sidebar-logo">
-        <div className="logo-icon"><Pill size={18} /></div>
-        <div>
-          <h1>HealthCare</h1>
-          <span>Management System</span>
-        </div>
-      </div>
-
-      <nav className="sidebar-nav">
-        {sections.map((section) => (
-          <div className="nav-section" key={section.section}>
-            <div className="nav-section-title">{section.section}</div>
-            {section.items.map((item) => (
-              <button
-                key={item.path}
-                className={`nav-item ${location.pathname === item.path ? 'active' : ''}`}
-                onClick={() => navigate(item.path)}
-              >
-                <item.icon size={18} />
-                {item.label}
-              </button>
-            ))}
+    <>
+      <div 
+        className={`sidebar-backdrop ${isOpen ? 'open' : ''}`} 
+        onClick={onClose} 
+      />
+      <aside className={`sidebar ${isOpen ? 'open' : ''}`}>
+        <div className="sidebar-logo">
+          <div className="logo-icon"><Pill size={18} /></div>
+          <div>
+            <h1>HealthCare</h1>
+            <span>Management System</span>
           </div>
-        ))}
-      </nav>
-
-      <div className="sidebar-footer">
-        <div className="user-card">
-          <div className="user-avatar">{user?.name?.[0]?.toUpperCase()}</div>
-          <div className="user-info">
-            <div className="name">{user?.name}</div>
-            <div className="role">{user?.role}</div>
-          </div>
-          <button className="logout-btn" onClick={logout} title="Logout">
-            <LogOut size={16} />
+          <button 
+            className="sidebar-close-btn" 
+            onClick={onClose} 
+            aria-label="Close navigation"
+          >
+            <X size={20} />
           </button>
         </div>
-      </div>
-    </aside>
+
+        <nav className="sidebar-nav">
+          {sections.map((section) => (
+            <div className="nav-section" key={section.section}>
+              <div className="nav-section-title">{section.section}</div>
+              {section.items.map((item) => (
+                <button
+                  key={item.path}
+                  className={`nav-item ${location.pathname === item.path ? 'active' : ''}`}
+                  onClick={() => handleNavigate(item.path)}
+                >
+                  <item.icon size={18} />
+                  {item.label}
+                </button>
+              ))}
+            </div>
+          ))}
+        </nav>
+
+        <div className="sidebar-footer">
+          <div className="user-card">
+            <div className="user-avatar">{user?.name?.[0]?.toUpperCase()}</div>
+            <div className="user-info">
+              <div className="name">{user?.name}</div>
+              <div className="role">{user?.role}</div>
+            </div>
+            <button className="logout-btn" onClick={logout} title="Logout">
+              <LogOut size={16} />
+            </button>
+          </div>
+        </div>
+      </aside>
+    </>
   );
 }

@@ -1,8 +1,9 @@
 import { useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useLang } from '../context/LanguageContext';
+import { Menu } from 'lucide-react';
 
-export default function Topbar() {
+export default function Topbar({ onToggleSidebar }) {
   const location = useLocation();
   const { user } = useAuth();
   const { lang, switchLang, t } = useLang();
@@ -26,9 +27,18 @@ export default function Topbar() {
 
   return (
     <header className="topbar">
-      <div className="topbar-title">{title}</div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <button
+          className="mobile-menu-btn"
+          onClick={onToggleSidebar}
+          aria-label="Toggle navigation menu"
+        >
+          <Menu size={20} />
+        </button>
+        <div className="topbar-title">{title}</div>
+      </div>
       <div className="topbar-actions">
-        <span style={{ fontSize: 13, color: 'var(--text-muted)' }}>
+        <span className="topbar-welcome" style={{ fontSize: 13, color: 'var(--text-muted)' }}>
           {t('welcomeBack')}, <strong>{user?.name?.split(' ')[0]}</strong>
         </span>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginLeft: 16 }}>
